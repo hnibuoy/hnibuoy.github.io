@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>NAS 文档库</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Vue 官方原版主题 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+
+  <style>
+    /* 搜索框优化 */
+    .search {
+      margin: 10px 15px 20px !important;
+    }
+    .search input {
+      border-radius: 8px !important;
+      padding: 8px 12px !important;
+      border: 1px solid #e5e5e5 !important;
+      font-size: 14px !important;
+    }
+
+    /* 顶部导航 */
+    .app-nav {
+      margin: 20px 0 30px !important;
+    }
+
+    /* 右侧文章目录（性能友好，不回流、不卡顿） */
+    #toc-nav {
+      position: fixed;
+      top: 100px;
+      right: 30px;
+      width: 220px;
+      padding: 15px;
+      border-left: 2px solid #eee;
+      font-size: 13px;
+      max-height: 70vh;
+      overflow-y: auto;
+      z-index: 10;
+      background: transparent;
+    }
+    #toc-nav a {
+      display: block;
+      padding: 4px 0;
+      color: #666;
+      text-decoration: none;
+    }
+    #toc-nav a:hover {
+      color: #42b983;
+    }
+
+    /* 给右侧目录预留空间 */
+    .content {
+      padding-right: 260px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <div id="toc-nav"></div>
+
+  <script>
+    window.$docsify = {
+      name: '小黄同学',
+      repo: '',
+      loadSidebar: true,
+      loadNavbar: true,
+      
+      subMaxLevel: 0,        // 左侧不显示文章标题（性能提升）
+      auto2top: true,        // 自动返回顶部
+      homepage: 'README.md',  // 默认首页
+      sidebarDisplayLevel: 1,// 侧边栏默认展开级别
+
+      // 搜索功能
+      search: {
+        placeholder: '搜索文档...',
+        noData: '未找到结果',
+        depth: 4
+      },
+
+      // 代码复制
+      copyCode: {
+        buttonText: '复制',
+        successText: '已复制'
+      }
+    };
+
+    // 右侧文章导航（性能优化：延迟加载，不阻塞页面）
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(() => {
+        const titles = document.querySelectorAll('.content h1, .content h2, .content h3');
+        const toc = document.getElementById('toc-nav');
+        if (!toc || !titles.length) return;
+        toc.innerHTML = '';
+        titles.forEach(t => {
+          const a = document.createElement('a');
+          a.href = '#' + t.id;
+          a.textContent = t.textContent;
+          toc.appendChild(a);
+        });
+      }, 300);
+    });
+  </script>
+
+  <!-- 核心脚本（仅保留必需） -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+</body>
+</html>
